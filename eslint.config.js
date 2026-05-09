@@ -7,7 +7,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 export default defineConfig([
   globalIgnores(['dist', 'Oldsrc']),
   {
-    files: ['vite.config.js', 'netlify/**/*.mjs', 'netlify/**/*.js'],
+    files: ['vite.config.js', 'netlify/**/*.mjs', 'netlify/**/*.js', 'scripts/**/*.mjs'],
     languageOptions: {
       globals: { ...globals.node },
       ecmaVersion: 2020,
