@@ -1,65 +1,98 @@
-import { GoLaw } from 'react-icons/go';
 import { HiOutlinePhone, HiOutlineMail, HiOutlineLocationMarker } from 'react-icons/hi';
-
-const footerLinks = {
-  'Practice Areas': [
-    'Felony Defense',
-    'DUI / DWI',
-    'Drug Offenses',
-    'White Collar Crime',
-    'Domestic Violence',
-    'Juvenile Defense',
-  ],
-  'Quick Links': [
-    { label: 'Home', href: '#home' },
-    { label: 'About Us', href: '#about' },
-    { label: 'Our Services', href: '#practice' },
-    { label: 'Testimonials', href: '#testimonials' },
-    { label: 'Contact', href: '#contact' },
-  ],
-};
+import { FaWhatsapp } from 'react-icons/fa';
+import { FIRM_EMAIL, FIRM_MAILTO_HREF, FIRM_PHONE_DISPLAY, FIRM_PHONE_HREF, FIRM_WHATSAPP_HREF } from '../constants/contact';
+import { OfficeAddressFooter } from './OfficeAddress';
+import { useI18n } from '../i18n/useI18n';
 
 export default function Footer() {
+  const { t, ta } = useI18n();
+  const practiceLinks = ta('footer.practiceLinks');
+  const quickLinks = ta('footer.quickLinks');
+  const legalLinks = ta('footer.legal');
+
   return (
-    <footer className="relative bg-navy-950 border-t border-navy-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <footer className="bg-slate-50 border-t border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
+        <div className="rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white via-slate-50/90 to-slate-100/80 shadow-sm px-6 py-7 sm:px-8 sm:py-8 mb-14 ring-1 ring-slate-200/60">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div>
+              <div
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="text-navy-900 font-semibold text-[21px] sm:text-[22px] leading-snug mb-1.5"
+              >
+                {t('footer.ctaTitle')}
+              </div>
+              <p style={{ fontFamily: 'var(--font-body)' }} className="text-slate-600 text-[13px] leading-relaxed">
+                {t('footer.ctaSubtitle')}
+              </p>
+            </div>
+            <div className="flex gap-3 flex-shrink-0 w-full sm:w-auto">
+              <a
+                href={FIRM_PHONE_HREF}
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="inline-flex flex-1 sm:flex-initial items-center justify-center gap-2 px-5 py-3 rounded-lg border border-slate-300/90 bg-white text-navy-900 text-[12px] font-medium shadow-sm hover:border-gold-500/45 hover:text-gold-800 transition-all"
+              >
+                <HiOutlinePhone className="text-gold-600 shrink-0" />
+                {FIRM_PHONE_DISPLAY}
+              </a>
+              <a
+                href="#contact"
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="inline-flex flex-1 sm:flex-initial items-center justify-center gap-2 px-5 py-3 rounded-lg bg-navy-900 text-white text-[12px] font-semibold tracking-wide ring-1 ring-inset ring-gold-500/35 hover:bg-navy-800 transition-colors shadow-sm"
+              >
+                {t('footer.bookConsultation')}
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <a href="#home" className="flex items-center gap-3 mb-5">
-              <GoLaw className="text-gold-500 text-2xl" />
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-9 h-9 bg-white border border-slate-200 flex items-center justify-center flex-shrink-0 overflow-hidden rounded-lg ring-1 ring-gold-500/20 p-[2px] shadow-sm">
+                <img src="/logo-transparent.png" alt="M.P. Law firm logo" className="w-full h-full object-contain" />
+              </div>
               <div>
-                <div className="font-heading text-lg font-bold text-white">MP Law Firm</div>
-                <div className="text-[9px] uppercase tracking-[0.3em] text-gold-500/60">
-                  Criminal Defense
+                <div style={{ fontFamily: 'var(--font-display)' }} className="text-navy-900 font-semibold text-[16px] tracking-tight">
+                  M.P. Law firm
+                </div>
+                <div style={{ fontFamily: 'var(--font-display)' }} className="text-[9px] uppercase tracking-[0.2em] text-slate-500">
+                  {t('nav.firmSubtitle')}
                 </div>
               </div>
-            </a>
-            <p className="text-gray-500 text-sm leading-relaxed mb-6">
-              Premier criminal defense attorneys dedicated to protecting your
-              rights, freedom, and future. Available 24/7 for emergency
-              consultations.
+            </div>
+            <p style={{ fontFamily: 'var(--font-body)' }} className="text-slate-600 text-[13px] leading-relaxed mb-6">
+              {t('footer.brandBody')}
             </p>
-            <div className="space-y-3">
-              <a href="tel:+1234567890" className="flex items-center gap-2 text-gray-400 hover:text-gold-400 transition-colors text-sm">
-                <HiOutlinePhone className="text-gold-500" /> (123) 456-7890
-              </a>
-              <a href="mailto:info@mplawfirm.com" className="flex items-center gap-2 text-gray-400 hover:text-gold-400 transition-colors text-sm">
-                <HiOutlineMail className="text-gold-500" /> info@mplawfirm.com
-              </a>
-              <div className="flex items-center gap-2 text-gray-400 text-sm">
-                <HiOutlineLocationMarker className="text-gold-500" /> 123 Justice Ave, Suite 500
+            <div className="space-y-4">
+              {[
+                { Icon: HiOutlinePhone, label: FIRM_PHONE_DISPLAY, href: FIRM_PHONE_HREF },
+                { Icon: HiOutlineMail, label: FIRM_EMAIL, href: FIRM_MAILTO_HREF },
+              ].map(({ Icon, label, href }) => (
+                <a key={label} href={href} style={{ fontFamily: 'var(--font-body)' }} className="flex items-center gap-2.5 text-slate-600 hover:text-gold-700 transition-colors text-[13px]">
+                  <Icon className="text-gold-600 text-base flex-shrink-0" /> {label}
+                </a>
+              ))}
+              <div className="flex items-start gap-2.5">
+                <HiOutlineLocationMarker className="text-gold-600 text-base flex-shrink-0 mt-0.5" aria-hidden />
+                <OfficeAddressFooter />
               </div>
             </div>
           </div>
 
-          {/* Practice Areas */}
           <div>
-            <h4 className="font-heading font-bold text-white mb-5">Practice Areas</h4>
+            <h4 style={{ fontFamily: 'var(--font-display)' }} className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-semibold mb-6">
+              {t('footer.practiceHeading')}
+            </h4>
             <ul className="space-y-3">
-              {footerLinks['Practice Areas'].map((area) => (
+              {practiceLinks.map((area) => (
                 <li key={area}>
-                  <a href="#practice" className="text-gray-500 hover:text-gold-400 transition-colors text-sm">
+                  <a
+                    href="#practice"
+                    style={{ fontFamily: 'var(--font-body)' }}
+                    className="text-slate-600 hover:text-gold-700 transition-colors text-[13px] flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-slate-400 group-hover:bg-gold-500 transition-colors flex-shrink-0" />
                     {area}
                   </a>
                 </li>
@@ -67,13 +100,19 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Quick Links */}
           <div>
-            <h4 className="font-heading font-bold text-white mb-5">Quick Links</h4>
+            <h4 style={{ fontFamily: 'var(--font-display)' }} className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-semibold mb-6">
+              {t('footer.quickHeading')}
+            </h4>
             <ul className="space-y-3">
-              {footerLinks['Quick Links'].map((link) => (
-                <li key={link.label}>
-                  <a href={link.href} className="text-gray-500 hover:text-gold-400 transition-colors text-sm">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    style={{ fontFamily: 'var(--font-body)' }}
+                    className="text-slate-600 hover:text-gold-700 transition-colors text-[13px] flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-slate-400 group-hover:bg-gold-500 transition-colors flex-shrink-0" />
                     {link.label}
                   </a>
                 </li>
@@ -81,38 +120,65 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* CTA */}
           <div>
-            <h4 className="font-heading font-bold text-white mb-5">Free Consultation</h4>
-            <p className="text-gray-500 text-sm mb-5">
-              Don&apos;t face criminal charges alone. Get expert legal advice today.
+            <h4 style={{ fontFamily: 'var(--font-display)' }} className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-semibold mb-6">
+              {t('footer.consultHeading')}
+            </h4>
+            <p style={{ fontFamily: 'var(--font-body)' }} className="text-slate-600 text-[13px] mb-5 leading-relaxed">
+              {t('footer.consultBody')}
             </p>
             <a
               href="#contact"
-              className="inline-block w-full text-center px-6 py-3 bg-gold-500 text-navy-950 font-bold rounded-lg hover:bg-gold-400 transition-all duration-300 text-sm"
+              style={{ fontFamily: 'var(--font-display)' }}
+              className="block w-full text-center py-3 rounded-lg bg-navy-900 text-white text-[11px] font-bold tracking-widest uppercase ring-1 ring-inset ring-gold-500/35 hover:bg-navy-800 transition-colors shadow-sm"
             >
-              Book Appointment
+              {t('footer.bookNow')}
             </a>
+            <div className="mt-5 pt-5 border-t border-slate-200">
+              <div style={{ fontFamily: 'var(--font-display)' }} className="text-[10px] uppercase tracking-widest text-gold-600 mb-2 font-semibold">
+                {t('footer.feelFree')}
+              </div>
+              <a
+                href={FIRM_PHONE_HREF}
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="text-navy-900 font-semibold text-[18px] hover:text-gold-700 transition-colors"
+              >
+                {FIRM_PHONE_DISPLAY}
+              </a>
+              <a
+                href={FIRM_WHATSAPP_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontFamily: 'var(--font-body)' }}
+                className="flex items-center gap-1.5 text-slate-600 text-[12px] mt-2 hover:text-gold-700 transition-colors"
+              >
+                <FaWhatsapp className="text-gold-600 text-sm flex-shrink-0" aria-hidden />
+                {t('footer.whatsappLine')}
+              </a>
+              <div style={{ fontFamily: 'var(--font-body)' }} className="text-slate-500 text-[11px] mt-1">
+                {t('footer.respondNote')}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-navy-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-600 text-sm">
-            &copy; {new Date().getFullYear()} MP Law Firm. All rights reserved.
+      <div className="border-t border-slate-200 bg-white/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p style={{ fontFamily: 'var(--font-body)' }} className="text-slate-500 text-[12px]">
+            {t('footer.copyright', { year: String(new Date().getFullYear()) })}
           </p>
-          <div className="flex gap-6 text-sm">
-            <a href="#" className="text-gray-600 hover:text-gold-400 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gold-400 transition-colors">
-              Terms of Service
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gold-400 transition-colors">
-              Disclaimer
-            </a>
+          <div className="flex gap-6">
+            {legalLinks.map((item) => (
+              <a
+                key={item}
+                href="#"
+                style={{ fontFamily: 'var(--font-body)' }}
+                className="text-slate-500 hover:text-gold-700 transition-colors text-[12px]"
+              >
+                {item}
+              </a>
+            ))}
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useMemo } from 'react';
+import { motion as Motion, useReducedMotion } from 'framer-motion';
 import { useInView } from './useInView';
 import {
   HiOutlineClock,
@@ -6,98 +7,198 @@ import {
   HiOutlineBadgeCheck,
   HiOutlineLightBulb,
 } from 'react-icons/hi';
+import { OFFICE_CITY } from '../constants/contact';
+import { useI18n } from '../i18n/useI18n';
 
-const reasons = [
-  {
-    icon: HiOutlineBadgeCheck,
-    title: 'Former Prosecutors on Your Side',
-    desc: 'Our attorneys include former prosecutors who know exactly how the other side builds a case — giving you a decisive strategic advantage.',
+const easeBusiness = [0.22, 1, 0.36, 1];
+
+const REASON_ICONS = [HiOutlineBadgeCheck, HiOutlineClock, HiOutlineShieldCheck, HiOutlineLightBulb];
+
+const leftColumnVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.085, delayChildren: 0.05 },
   },
-  {
-    icon: HiOutlineClock,
-    title: '24/7 Emergency Availability',
-    desc: "Criminal situations don't wait for business hours. Reach us anytime — day or night — for immediate legal counsel and support.",
+};
+
+const fadeUpItem = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.52, ease: easeBusiness },
   },
-  {
-    icon: HiOutlineShieldCheck,
-    title: 'Aggressive Yet Strategic Defense',
-    desc: 'We combine courtroom tenacity with meticulous preparation. Every motion, every argument, every detail is crafted for maximum impact.',
+};
+
+const statsGridVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.07, delayChildren: 0.05 },
   },
-  {
-    icon: HiOutlineLightBulb,
-    title: 'Transparent & Honest Guidance',
-    desc: 'No sugarcoating. We give you a realistic assessment of your case, clear options, and honest advice so you can make informed decisions.',
+};
+
+const statTileVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.42, ease: easeBusiness },
   },
-];
+};
+
+const reasonsListVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1, delayChildren: 0.14 },
+  },
+};
+
+const reasonCardVariants = {
+  hidden: { opacity: 0, x: 28 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.55, ease: easeBusiness },
+  },
+};
 
 export default function WhyChooseUs() {
-  const [ref, inView] = useInView(0.15);
+  const { t, ta } = useI18n();
+  const [ref, inView] = useInView(0.12);
+  const prefersReducedMotion = useReducedMotion();
+
+  const reasons = useMemo(() => {
+    const rows = ta('why.reasons');
+    return rows.map((r, i) => ({
+      icon: REASON_ICONS[i] ?? HiOutlineBadgeCheck,
+      title: r.title,
+      desc: r.desc,
+    }));
+  }, [ta]);
+
+  const stats = ta('why.stats');
+
+  const motionState = inView ? 'visible' : 'hidden';
+  const skipMotion = Boolean(prefersReducedMotion);
 
   return (
-    <section id="why-us" ref={ref} className="relative py-24 sm:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-navy-900" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent" />
-
-      {/* Decorative accent */}
-      <motion.div
-        animate={{ opacity: [0.03, 0.08, 0.03] }}
-        transition={{ duration: 6, repeat: Infinity }}
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold-500 rounded-full blur-[200px]"
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7 }}
+    <section id="why-us" ref={ref} className="py-24 sm:py-32 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-5 gap-16 items-start">
+          <Motion.div
+            className="lg:col-span-2"
+            variants={skipMotion ? undefined : leftColumnVariants}
+            initial={skipMotion ? false : 'hidden'}
+            animate={skipMotion ? undefined : motionState}
           >
-            <span className="text-gold-500 text-sm font-semibold uppercase tracking-widest">
-              Why Choose Us
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6 leading-tight">
-              We Don&apos;t Just Defend.{' '}
-              <span className="text-gold-500">We Fight.</span>
-            </h2>
-            <p className="text-gray-400 leading-relaxed mb-8">
-              Choosing the right criminal defense attorney can mean the difference
-              between freedom and incarceration. Here&apos;s why clients trust MP Law
-              Firm with their most critical cases.
-            </p>
+            <Motion.div
+              style={{ fontFamily: 'var(--font-display)' }}
+              className="text-[10px] uppercase tracking-[0.2em] text-gold-600 font-semibold mb-4"
+              variants={skipMotion ? undefined : fadeUpItem}
+            >
+              {t('why.eyebrow', { city: OFFICE_CITY })}
+            </Motion.div>
+            <Motion.h2
+              style={{ fontFamily: 'var(--font-display)' }}
+              className="text-[36px] sm:text-[42px] font-semibold leading-tight tracking-tight text-navy-900 mb-6"
+              variants={skipMotion ? undefined : fadeUpItem}
+            >
+              {t('why.title1')}
+              <br />
+              <span className="text-gold-500">{t('why.title2')}</span>
+            </Motion.h2>
+            <Motion.p
+              style={{ fontFamily: 'var(--font-body)' }}
+              className="text-slate-500 text-[15px] leading-relaxed mb-12"
+              variants={skipMotion ? undefined : fadeUpItem}
+            >
+              {t('why.intro')}
+            </Motion.p>
 
-            <div className="grid grid-cols-3 gap-6">
-              {[
-                { num: '500+', label: 'Cases Won' },
-                { num: '20+', label: 'Years Experience' },
-                { num: '5-Star', label: 'Client Rating' },
-              ].map((s) => (
-                <div key={s.label}>
-                  <div className="font-heading text-2xl font-bold text-gold-500">{s.num}</div>
-                  <div className="text-gray-500 text-xs mt-1">{s.label}</div>
-                </div>
+            <Motion.div
+              className="grid grid-cols-2 gap-px bg-slate-200"
+              variants={skipMotion ? undefined : statsGridVariants}
+            >
+              {stats.map((s) => (
+                <Motion.div
+                  key={s.label}
+                  variants={skipMotion ? undefined : statTileVariants}
+                  whileHover={
+                    skipMotion
+                      ? undefined
+                      : {
+                          y: -2,
+                          transition: { duration: 0.22, ease: easeBusiness },
+                        }
+                  }
+                  whileTap={skipMotion ? undefined : { scale: 0.995 }}
+                  className="bg-navy-900 px-6 py-7 text-center"
+                >
+                  <div
+                    style={{ fontFamily: 'var(--font-display)' }}
+                    className="text-[28px] font-semibold text-gold-400 leading-none mb-2"
+                  >
+                    {s.value}
+                  </div>
+                  <div
+                    style={{ fontFamily: 'var(--font-display)' }}
+                    className="text-[9px] uppercase tracking-widest text-slate-400 font-medium"
+                  >
+                    {s.label}
+                  </div>
+                </Motion.div>
               ))}
-            </div>
-          </motion.div>
+            </Motion.div>
 
-          <div className="space-y-5">
-            {reasons.map((reason, i) => (
-              <motion.div
-                key={reason.title}
-                initial={{ opacity: 0, x: 50 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.15 }}
-                className="group flex gap-5 p-5 rounded-xl bg-navy-950/50 border border-navy-700/30 hover:border-gold-500/20 transition-all duration-300"
+            <Motion.div className="mt-8" variants={skipMotion ? undefined : fadeUpItem}>
+              <a
+                href="#contact"
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-navy-900 text-white text-[12px] font-semibold tracking-wide hover:bg-navy-700 transition-colors duration-200 group"
               >
-                <div className="w-12 h-12 bg-gold-500/10 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-gold-500/20 transition-colors">
-                  <reason.icon className="text-gold-500 text-xl" />
+                {t('why.cta', { city: OFFICE_CITY })}
+                <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+              </a>
+            </Motion.div>
+          </Motion.div>
+
+          <Motion.div
+            className="lg:col-span-3 space-y-4"
+            variants={skipMotion ? undefined : reasonsListVariants}
+            initial={skipMotion ? false : 'hidden'}
+            animate={skipMotion ? undefined : motionState}
+          >
+            {reasons.map((reason) => (
+              <Motion.div
+                key={reason.title}
+                variants={skipMotion ? undefined : reasonCardVariants}
+                whileHover={
+                  skipMotion
+                    ? undefined
+                    : {
+                        y: -2,
+                        transition: { duration: 0.28, ease: easeBusiness },
+                      }
+                }
+                className="group flex gap-5 p-6 border border-slate-100 transition-colors duration-300 hover:border-gold-200/70 hover:bg-slate-50/90 hover:shadow-[0_10px_36px_-18px_rgba(15,23,42,0.08)]"
+              >
+                <div className="w-12 h-12 bg-navy-900 group-hover:bg-navy-800 flex items-center justify-center flex-shrink-0 transition-colors duration-300 ring-1 ring-gold-500/15 group-hover:ring-gold-500/25">
+                  <reason.icon className="text-gold-400 text-xl transition-colors duration-300" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-1">{reason.title}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{reason.desc}</p>
+                  <h3
+                    style={{ fontFamily: 'var(--font-display)' }}
+                    className="text-[16px] font-semibold text-navy-900 mb-2"
+                  >
+                    {reason.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)' }} className="text-slate-500 text-[14px] leading-relaxed">
+                    {reason.desc}
+                  </p>
                 </div>
-              </motion.div>
+              </Motion.div>
             ))}
-          </div>
+          </Motion.div>
         </div>
       </div>
     </section>

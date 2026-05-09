@@ -1,11 +1,16 @@
+# Secrets: set only in Netlify → Site configuration → Environment variables.
+# Do not commit a populated .env. Never prefix WhatsApp tokens or Google API keys with VITE_.
 [build]
-  command = "npm run build"
   publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "20"
+  command = "npm run deploy:check && npm run build"
+  functions = "netlify/functions"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/google-reviews"
+  to = "/.netlify/functions/google-reviews"
+  status = 200
+
+[[redirects]]
+  from = "/api/whatsapp-enquiry"
+  to = "/.netlify/functions/whatsapp-enquiry-notify"
   status = 200

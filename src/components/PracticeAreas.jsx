@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useMemo } from 'react';
+import { motion as Motion } from 'framer-motion';
 import { useInView } from './useInView';
 import {
   HiOutlineShieldCheck,
@@ -8,92 +9,110 @@ import {
   HiOutlineHome,
   HiOutlineExclamationCircle,
 } from 'react-icons/hi';
+import { OFFICE_CITY } from '../constants/contact';
+import { useI18n } from '../i18n/useI18n';
 
-const areas = [
-  {
-    icon: HiOutlineShieldCheck,
-    title: 'Felony Defense',
-    desc: 'Aggressive representation for serious charges including assault, robbery, and weapons offenses.',
-  },
-  {
-    icon: HiOutlineExclamationCircle,
-    title: 'DUI / DWI',
-    desc: 'Strategic defense against drunk driving charges. Protecting your license and your record.',
-  },
-  {
-    icon: HiOutlineScale,
-    title: 'Drug Offenses',
-    desc: 'Defense for possession, distribution, and trafficking charges at state and federal levels.',
-  },
-  {
-    icon: HiOutlineDocumentText,
-    title: 'White Collar Crime',
-    desc: 'Expert defense for fraud, embezzlement, money laundering, and corporate crime cases.',
-  },
-  {
-    icon: HiOutlineHome,
-    title: 'Domestic Violence',
-    desc: 'Sensitive and effective defense strategies for domestic allegations and restraining orders.',
-  },
-  {
-    icon: HiOutlineUserGroup,
-    title: 'Juvenile Defense',
-    desc: 'Protecting the futures of young people facing criminal charges in juvenile court.',
-  },
+const AREA_ICONS = [
+  HiOutlineShieldCheck,
+  HiOutlineExclamationCircle,
+  HiOutlineScale,
+  HiOutlineDocumentText,
+  HiOutlineHome,
+  HiOutlineUserGroup,
 ];
 
 export default function PracticeAreas() {
-  const [ref, inView] = useInView(0.1);
+  const { t, ta } = useI18n();
+  const [ref, inView] = useInView(0.08);
+
+  const areas = useMemo(() => {
+    const rows = ta('practice.areas');
+    return rows.map((area, i) => ({
+      ...area,
+      icon: AREA_ICONS[i] ?? HiOutlineShieldCheck,
+    }));
+  }, [ta]);
 
   return (
-    <section id="practice" ref={ref} className="relative py-24 sm:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-navy-950" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/20 to-transparent" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
+    <section id="practice" ref={ref} className="py-24 sm:py-32 bg-slate-50 border-y border-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Motion.div
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-6"
         >
-          <span className="text-gold-500 text-sm font-semibold uppercase tracking-widest">
-            Our Expertise
-          </span>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-            Practice <span className="text-gold-500">Areas</span>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            With deep expertise across all areas of criminal law, we provide
-            comprehensive defense strategies tailored to each unique case.
-          </p>
-        </motion.div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {areas.map((area, i) => (
-            <motion.div
-              key={area.title}
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative p-8 rounded-2xl bg-navy-900/50 border border-navy-700/50 hover:border-gold-500/30 transition-all duration-500 hover:bg-navy-800/50"
+          <div>
+            <div
+              style={{ fontFamily: 'var(--font-display)' }}
+              className="text-[10px] uppercase tracking-[0.2em] text-gold-600 font-semibold mb-4"
             >
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative z-10">
-                <div className="w-14 h-14 bg-gold-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-gold-500/20 transition-colors duration-300">
-                  <area.icon className="text-gold-500 text-2xl" />
-                </div>
-                <h3 className="font-heading text-xl font-bold text-white mb-3">
-                  {area.title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {area.desc}
-                </p>
-                <div className="mt-6 flex items-center gap-2 text-gold-500 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                  Learn more <span>&rarr;</span>
-                </div>
+              {t('practice.eyebrow')}
+            </div>
+            <h2
+              style={{ fontFamily: 'var(--font-display)' }}
+              className="text-[36px] sm:text-[44px] font-semibold leading-tight tracking-tight text-navy-900"
+            >
+              {t('practice.title')} <span className="text-gold-500">{t('practice.titleGold')}</span>
+            </h2>
+          </div>
+          <p style={{ fontFamily: 'var(--font-body)' }} className="text-slate-500 text-[15px] leading-relaxed max-w-md lg:text-right">
+            {t('practice.intro', { city: OFFICE_CITY })}
+          </p>
+        </Motion.div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-200">
+          {areas.map((area, i) => (
+            <Motion.a
+              key={area.num}
+              href="#contact"
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="group bg-white p-8 transition-all duration-300 ease-out block no-underline text-inherit focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 hover:bg-slate-50/90 hover:shadow-[0_12px_40px_-16px_rgba(15,23,42,0.09)] hover:ring-1 hover:ring-gold-500/15"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <span
+                  style={{ fontFamily: 'var(--font-display)' }}
+                  className="text-[11px] font-bold text-slate-300 group-hover:text-slate-400 transition-colors duration-300 tracking-wider"
+                >
+                  {area.num}
+                </span>
+                <span
+                  style={{ fontFamily: 'var(--font-display)' }}
+                  className="text-[9px] uppercase tracking-widest font-medium text-gold-600 group-hover:text-gold-700 transition-colors duration-300"
+                >
+                  {area.tag}
+                </span>
               </div>
-            </motion.div>
+
+              <div className="w-11 h-11 bg-navy-50 group-hover:bg-navy-100/90 flex items-center justify-center mb-5 transition-colors duration-300">
+                <area.icon className="text-navy-900 group-hover:text-navy-800 text-xl transition-colors duration-300" />
+              </div>
+
+              <h3
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="text-[18px] font-semibold text-navy-900 mb-3 transition-colors duration-300"
+              >
+                {area.title}
+              </h3>
+              <p
+                style={{ fontFamily: 'var(--font-body)' }}
+                className="text-slate-500 group-hover:text-slate-600 text-[13px] leading-relaxed transition-colors duration-300"
+              >
+                {area.desc}
+              </p>
+
+              <div className="mt-6 pt-5 border-t border-slate-100 group-hover:border-gold-200/50 transition-colors duration-300">
+                <span
+                  style={{ fontFamily: 'var(--font-display)' }}
+                  className="text-[11px] font-semibold text-slate-400 group-hover:text-gold-700 uppercase tracking-widest flex items-center gap-1.5 transition-colors duration-300"
+                >
+                  {t('practice.discuss')}
+                  <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
+                </span>
+              </div>
+            </Motion.a>
           ))}
         </div>
       </div>

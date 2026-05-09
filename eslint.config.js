@@ -5,9 +5,18 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'Oldsrc']),
+  {
+    files: ['vite.config.js', 'netlify/**/*.mjs', 'netlify/**/*.js'],
+    languageOptions: {
+      globals: { ...globals.node },
+      ecmaVersion: 2020,
+      sourceType: 'module',
+    },
+  },
   {
     files: ['**/*.{js,jsx}'],
+    ignores: ['netlify/**', 'vite.config.js'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -23,7 +32,7 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^[A-Z_]' }],
     },
   },
 ])
