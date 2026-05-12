@@ -72,6 +72,14 @@ export default function ContactCTA() {
     const matterLabel = idx >= 0 ? caseTypeLabels[idx] : form.caseType;
     try {
       if (!isEmailJsConfigured()) {
+        if (import.meta.env.PROD) {
+          console.warn(
+            '[M.P. Law firm] Contact form: EmailJS was not embedded in this build. ' +
+              'In Netlify → Site configuration → Environment variables, set VITE_EMAILJS_PUBLIC_KEY, ' +
+              'VITE_EMAILJS_SERVICE_ID, and VITE_EMAILJS_TEMPLATE_ID (names must start with VITE_), ' +
+              'then deploy again. Values are baked in at build time, not at page load.',
+          );
+        }
         setSubmitError(t('contact.emailNotConfigured'));
         return;
       }

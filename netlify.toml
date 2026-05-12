@@ -1,5 +1,13 @@
 # Secrets: set only in Netlify → Site configuration → Environment variables.
 # Do not commit a populated .env. Never prefix WhatsApp tokens or Google API keys with VITE_.
+#
+# Contact form (EmailJS) — REQUIRED for the form to work on the live site:
+#   VITE_EMAILJS_PUBLIC_KEY
+#   VITE_EMAILJS_SERVICE_ID
+#   VITE_EMAILJS_TEMPLATE_ID
+# Optional: VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID, VITE_EMAILJS_INBOX_EMAIL, VITE_EMAILJS_TO_TEMPLATE_PARAM
+# These MUST be present when `vite build` runs. After adding or changing them, trigger a new deploy.
+# (Deploy Previews only get them if you enable the same vars for that context in Netlify.)
 [build]
   publish = "dist"
   command = "npm run deploy:check && npm run build"
